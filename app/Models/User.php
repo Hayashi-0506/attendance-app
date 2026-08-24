@@ -47,8 +47,14 @@ class User extends Authenticatable
     /**
      * このユーザーに属する勤怠を取得
      */
-    public function attendance_records(): HasMany
+    public function attendanceRecords(): HasMany
     {
         return $this->hasMany(AttendanceRecord::class);
+    }
+
+    public function todayAttendance()
+    {
+        return $this->hasOne(AttendanceRecord::class)
+            ->whereDate('work_date', today());
     }
 }
