@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendance_records', function (Blueprint $table) {
+        Schema::create('attendance_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('attendance_record_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->unique(['user_id', 'date']);
+            $table->integer('approval_status')->default(0);
             $table->datetime('clock_in');
-            $table->datetime('clock_out')->nullable();
+            $table->datetime('clock_out');
+            $table->string('comment', 255);
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendance_records');
+        Schema::dropIfExists('attendance_requests');
     }
 };

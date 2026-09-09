@@ -52,9 +52,29 @@ class User extends Authenticatable
         return $this->hasMany(AttendanceRecord::class);
     }
 
+    /**
+     * このユーザーに属する勤怠を取得
+     */
+    public function attendanceRequests(): HasMany
+    {
+        return $this->hasMany(AttendanceRequest::class);
+    }
+
     public function todayAttendance()
     {
         return $this->hasOne(AttendanceRecord::class)
-            ->whereDate('work_date', today());
+            ->whereDate('date', now()->toDateString())
+            ->with('latestBreakRecord');
+    }
+
+    public function getAttendanceStatusAttribute()
+    {
+        $attendance = $this->todayAttendance;
+
+        if (! $attendance) {
+            return '勤務外';
+        }
+
+        return $attendance->attendance_status;
     }
 }

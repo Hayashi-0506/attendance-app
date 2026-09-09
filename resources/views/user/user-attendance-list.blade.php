@@ -38,20 +38,19 @@
         @foreach($formattedAttendanceRecords as $attendanceRecord)
         <tr class="table__row">
             <td class="table__description">
-                <p class="table__description--item">{{ $attendanceRecord['date'] }}</p>
+                <p class="table__description--item">{{ $attendanceRecord->formatted_date }}</p>
             </td>
             <td class="table__description">
-                <p class="table__description--item">{{ $attendanceRecord['clock_in'] }}
-                </p>
+                <p class="table__description--item">{{ $attendanceRecord->formatted_clock_in }}</p>
             </td>
             <td class="table__description">
-                <p class="table__description--item">{{ $attendanceRecord['clock_out'] }}</p>
+                <p class="table__description--item">{{ $attendanceRecord->formatted_clock_out }}</p>
             </td>
             <td class="table__description">
-                <p class="table__description--item">{{ $attendanceRecord['total_break_time'] ? \Carbon\Carbon::parse($attendanceRecord['total_break_time'])->format('G:i') : '' }}</p>
+                <p class="table__description--item">{{ $attendanceRecord->formatSecondsToHM($attendanceRecord['total_break_time']) }}</p>
             </td>
             <td class="table__description">
-                <p class="table__description--item">{{ $attendanceRecord['total_time'] ? \Carbon\Carbon::parse($attendanceRecord['total_time'])->format('G:i') : '' }}</p>
+                <p class="table__description--item">{{ $attendanceRecord->formatSecondsToHM($attendanceRecord['total_time']) }}</p>
             </td>
             <td class="table__description">
                 @if (!empty($attendanceRecord['id']))
