@@ -14,7 +14,7 @@
     <form class="attendance__form" action="/attendance" method="post">
         @csrf
         <div class="current-date">
-            <input class="current-date__item" type="text" value="{{ $formattedDate }}" readonly>
+            <input class="current-date__item" type="text" id="currentDate" value="{{ $formattedDate }}" readonly>
         </div>
         <div class="current-time">
             <input class="current-time__item" type="text" id="currentTime" value="{{ $formattedTime }}" readonly>
@@ -37,8 +37,10 @@
 <script>
     function updateTime() {
         const now = new Date();
-        const options = { hour: '2-digit', minute: '2-digit', hour12: false };
-        document.getElementById('currentTime').value = now.toLocaleTimeString('ja-JP', options);
+        const dateOptions = { year: 'numeric', month: 'long', day: '2-digit' , weekday: 'short' };
+        const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
+        document.getElementById('currentDate').value = now.toLocaleDateString('ja-JP', dateOptions);
+        document.getElementById('currentTime').value = now.toLocaleTimeString('ja-JP', timeOptions);
     }
     setInterval(updateTime, 1000);
     updateTime();
