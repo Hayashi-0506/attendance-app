@@ -62,8 +62,8 @@
                         <div class="error-message">
                             <div></div>
                             <div class="error-message__item">
-                                @error('breaks.' . $index . '.new_break_in')<p>{{ $message }}</p>@enderror
-                                @error('breaks.' . $index . '.new_break_out')<p>{{ $message }}</p>@enderror
+                                @error('new_break_in.' . $index)<p>{{ $message }}</p>@enderror
+                                @error('new_break_out.' . $index)<p>{{ $message }}</p>@enderror
                             </div>
                         </div>
                     @endforeach
@@ -80,8 +80,8 @@
                     <div class="error-message">
                         <div></div>
                         <div class="error-message__item">
-                            @error('breaks.' . $newBreakIndex . '.new_break_in')<p>{{ $message }}</p>@enderror
-                            @error('breaks.' . $newBreakIndex . '.new_break_out')<p>{{ $message }}</p>@enderror
+                            @error('new_break_in.' . $newBreakIndex)<p>{{ $message }}</p>@enderror
+                            @error('new_break_out.' . $newBreakIndex)<p>{{ $message }}</p>@enderror
                         </div>
                     </div>
 

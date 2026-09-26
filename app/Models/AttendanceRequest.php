@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\ApprovalStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,16 +14,19 @@ class AttendanceRequest extends Model
     protected $fillable = [
         'attendance_record_id',
         'user_id',
-        'approval_status',
+        'is_approved',
+        'date',
         'clock_in',
         'clock_out',
         'comment',
+        'request_date',
     ];
 
     protected $casts = [
+        'date' => 'date',
         'clock_in' => 'datetime',
         'clock_out' => 'datetime',
-        'approval_status' => ApprovalStatus::class,
+        'request_date' => 'date',
     ];
 
     /**
@@ -49,5 +51,15 @@ class AttendanceRequest extends Model
     public function breakRequests(): HasMany
     {
         return $this->hasMany(BreakRequest::class);
+    }
+
+    public function getRequestStatusAttribute()
+    {
+        // dump($this->is_approved);
+        if ($this->is_approved) {
+            return '承認済み';
+        }
+
+        return '承認待ち';
     }
 }

@@ -4,8 +4,8 @@ namespace App\Enum;
 
 enum ApprovalStatus: int
 {
-    case Pending = 0;
-    case Approved = 1;
+    case Pending = false;
+    case Approved = true;
 
     public function label(): string
     {

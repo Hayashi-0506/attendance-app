@@ -37,22 +37,22 @@
                     </th>
                 </tr>
                 @foreach ($applications as $application)
-                @if ($application->approval_status === '承認待ち')
+                @if ($application['approval_status'] === '承認待ち')
                 <tr class="table__row">
                     <td class="table__description">
-                        <p class="table__description--item">{{ $application->approval_status }}</p>
+                        <p class="table__description--item">{{ $application['approval_status'] }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ $application->user->name }}</p>
+                        <p class="table__description--item">{{ $application['user_name'] }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ \Carbon\Carbon::parse($application->AttendanceRecord->date)->format('Y/m/d') }}</p>
+                        <p class="table__description--item">{{ $application['date'] }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ $application->comment }}</p>
+                        <p class="table__description--item">{{ $application['comment'] ?? 'なし' }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ \Carbon\Carbon::parse($application->application_date)->format('Y/m/d') }}</p>
+                        <p class="table__description--item">{{ $application['application_date'] }}</p>
                     </td>
                     <td class="table__description">
                         <a class="table__item--detail-link" href="{{ url('/stamp_correction_request/approve/' . $application['id']) }}">詳細</a>
@@ -85,22 +85,22 @@
                     </th>
                 </tr>
                 @foreach ($applications as $application)
-                @if ($application->approval_status === '承認済み')
+                @if ($application['approval_status'] === '承認済み')
                 <tr class="table__row">
                     <td class="table__description">
-                        <p class="table__description--item">{{ $application->approval_status }}</p>
+                        <p class="table__description--item">{{ $application['approval_status'] }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ $application->user->name }}</p>
+                        <p class="table__description--item">{{ $application['user_name'] }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ \Carbon\Carbon::parse($application->AttendanceRecord->date)->format('Y/m/d') }}</p>
+                        <p class="table__description--item">{{ $application['date'] }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ $application->comment }}</p>
+                        <p class="table__description--item">{{ $application['comment'] ?? 'なし' }}</p>
                     </td>
                     <td class="table__description">
-                        <p class="table__description--item">{{ \Carbon\Carbon::parse($application->application_date)->format('Y/m/d') }}</p>
+                        <p class="table__description--item">{{ $application['application_date'] }}</p>
                     </td>
                     <td class="table__description">
                         <a class="table__item--detail-link" href="{{ url('/stamp_correction_request/approve/' . $application['id']) }}">詳細</a>

@@ -9,7 +9,7 @@
     <div class="detail__header">
         <h1 class="content__header--item">勤怠詳細</h1>
     </div>
-    <form class="applied-form" action="{{ url('/stamp_correction_request/approve/' . $application['id']) }}" method="post">
+    <form class="applied-form" action="{{ url('/stamp_correction_request/approve/' . $application->id) }}" method="post">
         @csrf
         <div class="applied-form__content">
             <div class="applied-form__group">
@@ -39,10 +39,10 @@
                     <label class="applied-form__header">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</label>
                     <div class="applied-form__input-group">
                         <input class="applied-form__input readonly" type="text" name="new_break_in[]"
-                            value="{{ \Carbon\Carbon::parse($break->break_in)->format('H:i') }}" readonly>
+                            value="{{ $break->break_in }}" readonly>
                         <p>〜</p>
                         <input class="applied-form__input readonly" type="text" name="new_break_out[]"
-                            value="{{ $break->break_out ? \Carbon\Carbon::parse($break->break_out)->format('H:i') : '' }}" readonly>
+                            value="{{ $break->break_out ? $break->break_out : '' }}" readonly>
                     </div>
                 </div>
             @endforeach

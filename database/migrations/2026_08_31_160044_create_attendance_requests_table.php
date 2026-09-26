@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('attendance_record_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('approval_status')->default(0);
+            $table->boolean('is_approved')->default(false);
+            $table->date('date');
             $table->datetime('clock_in');
             $table->datetime('clock_out');
             $table->string('comment', 255);
+            $table->date('request_date');
             $table->timestamps();
         });
     }
