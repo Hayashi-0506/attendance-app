@@ -9,14 +9,14 @@ use App\Models\AttendanceRecord;
 use App\Models\AttendanceRequest;
 use App\Models\User;
 use App\Services\AttendanceService;
-use DateTimeImmutable;
+use App\Services\RequestService;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
     public function __construct(
         private AttendanceService $attendanceService,
+        private RequestService $requestService,
     ) {}
 
     /**
@@ -24,9 +24,7 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $user = User::with('todayAttendance')
-            ->findOrFail(auth()->id());
-
+        $user = User::with('todayAttendance')->findOrFail(auth()->id());
         $formattedDate = date('Y-m-d');
         $formattedTime = date('H:i:s');
 
@@ -88,27 +86,9 @@ class AttendanceController extends Controller
      */
     public function edit(EditAttendanceRequest $request, AttendanceRecord $attendanceRecord)
     {
-        $date = new DateTimeImmutable($attendanceRecord->date);
+        $this->attendanceService->createAttendanceRequest($request, $attendanceRecord);
 
-        $attendanceRequest = AttendanceRequest::create([
-            'attendance_record_id' => $attendanceRecord->id,
-            'user_id' => auth()->id(),
-            'clock_in' => $date->modify($request->new_clock_in),
-            'clock_out' => $date->modify($request->new_clock_out),
-            'comment' => $request->comment,
-        ]);
-
-        foreach ($request->breaks as $break) {
-            if ($break['new_break_in']) {
-                $attendanceRequest->breakRequests()->create([
-                    'attendance_request_id' => $attendanceRequest->id,
-                    'break_in' => $break['new_break_in'],
-                    'break_out' => $break['new_break_out'],
-                ]);
-            }
-        }
-
-        redirect()->route('attendance.showAttendance', ['id' => $attendanceRecord->id])
+        return redirect()->route('attendance.showAttendance', $attendanceRecord->id)
             ->with('success', '修正が完了しました。');
     }
 
@@ -117,23 +97,7 @@ class AttendanceController extends Controller
      */
     public function applicationList()
     {
-        $user = auth()->user();
-        $attendanceRequests = AttendanceRequest::with('attendanceRecord', 'breakRequests')
-            ->where('user_id', $user->id)
-            ->get();
-
-        $formattedApplications = $attendanceRequests->map(fn ($attendanceRequest) => [
-            'id' => $attendanceRequest->id,
-            'approval_status' => $attendanceRequest->approval_status->label(),
-            'date' => $attendanceRequest->attendanceRecord->date->format('Y/m/d'),
-            'comment' => $attendanceRequest->comment,
-            'application_date' => $attendanceRequest->created_at->format('Y/m/d'),
-        ])->toArray();
-
-        return view('user.user-application-list', [
-            'user' => $user,
-            'formattedApplications' => $formattedApplications,
-        ]);
+        return $this->requestService->getApplicationList();
     }
 
     /**
@@ -149,21 +113,5 @@ class AttendanceController extends Controller
             'data' => $data,
             'user' => auth()->user(),
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        dd($request);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

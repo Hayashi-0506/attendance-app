@@ -22,14 +22,39 @@ class EditAttendanceRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'new_clock_in' => ['required', 'date_format:H:i'],
-            'new_clock_out' => ['nullable', 'date_format:H:i', 'after_or_equal:new_clock_in'],
-            'breaks' => ['nullable', 'array'],
-            'breaks.*.new_break_in' => ['nullable', 'required_with:breaks.*.new_break_out', 'date_format:H:i', 'after_or_equal:new_clock_in', 'before_or_equal:new_clock_out'],
-            'breaks.*.new_break_out' => ['nullable', 'date_format:H:i', 'after_or_equal:breaks.*.new_break_in', 'before_or_equal:new_clock_out'],
+            'new_clock_out' => ['required', 'date_format:H:i', 'after_or_equal:new_clock_in'],
+            'new_break_in' => ['nullable', 'array'],
+            'new_break_out' => ['nullable', 'array'],
             'comment' => ['required', 'max:255'],
         ];
+
+        $breakIns = $this->input('new_break_in', []);
+        $breakOuts = $this->input('new_break_out', []);
+
+        // 両方の配列のインデックスを合わせて走査（片方しかキーが無いケースも考慮）
+        $indexes = array_unique(array_merge(array_keys($breakIns), array_keys($breakOuts)));
+        sort($indexes);
+
+        $lastIndex = end($indexes);
+
+        foreach ($indexes as $index) {
+            $inKey = "new_break_in.$index";
+            $outKey = "new_break_out.$index";
+
+            if ($index === $lastIndex) {
+                // 最後の要素だけは両方nullでもOK（片方入力されたらもう片方も必須）
+                $rules[$inKey] = ['bail', 'nullable', 'date_format:H:i', 'after_or_equal:new_clock_in', 'before_or_equal:new_clock_out', "required_with:$outKey"];
+                $rules[$outKey] = ['bail', 'nullable', 'date_format:H:i', "after_or_equal:$inKey", 'before_or_equal:new_clock_out', "required_with:$inKey"];
+            } else {
+                // それ以外は両方必須
+                $rules[$inKey] = ['bail', 'required', 'date_format:H:i', 'after_or_equal:new_clock_in', 'before_or_equal:new_clock_out'];
+                $rules[$outKey] = ['bail', 'required', 'date_format:H:i', "after_or_equal:$inKey", 'before_or_equal:new_clock_out'];
+            }
+        }
+
+        return $rules;
     }
 
     public function messages(): array
@@ -37,16 +62,21 @@ class EditAttendanceRequest extends FormRequest
         return [
             'new_clock_in.required' => '出勤時間を入力してください',
             'new_clock_in.date_format' => '出勤時間は「時:分」形式（例：09:00）で入力してください',
+            'new_clock_out.required' => '退勤時間を入力してください',
             'new_clock_out.date_format' => '退勤時間は「時:分」形式（例：18:00）で入力してください',
             'new_clock_out.after_or_equal' => '出勤時間もしくは退勤時間が不適切な値です',
 
-            'breaks.*.new_break_in.date_format' => '休憩開始時間は「時:分」形式（例：12:00）で入力してください',
-            'breaks.*.new_break_in.after_or_equal' => '休憩時間が不適切な値です',
-            'breaks.*.new_break_in.before_or_equal' => '休憩時間が不適切な値です',
+            'new_break_in.*.required' => '休憩開始時間を入力してください',
+            'new_break_in.*.required_with' => '休憩開始時間を入力してください',
+            'new_break_in.*.date_format' => '休憩開始時間は「時:分」形式（例：12:00）で入力してください',
+            'new_break_in.*.after_or_equal' => '休憩時間が不適切な値です',
+            'new_break_in.*.before_or_equal' => '休憩時間が不適切な値です',
 
-            'breaks.*.new_break_out.date_format' => '休憩終了時間は「時:分」形式（例：13:00）で入力してください',
-            'breaks.*.new_break_out.after_or_equal' => '休憩時間が不適切な値です',
-            'breaks.*.new_break_out.before_or_equal' => '休憩時間もしくは退勤時間が不適切な値です',
+            'new_break_out.*.required' => '休憩終了時間を入力してください',
+            'new_break_out.*.required_with' => '休憩終了時間を入力してください',
+            'new_break_out.*.date_format' => '休憩終了時間は「時:分」形式（例：13:00）で入力してください',
+            'new_break_out.*.after_or_equal' => '休憩時間が不適切な値です',
+            'new_break_out.*.before_or_equal' => '休憩時間もしくは退勤時間が不適切な値です',
 
             'comment.required' => 'コメントを入力してください',
         ];

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\ApprovalStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -59,7 +58,7 @@ class AttendanceRecord extends Model
 
     public function approvedAttendanceRequests(): HasOne
     {
-        return $this->hasOne(AttendanceRequest::class)->where('approval_status', ApprovalStatus::Pending);
+        return $this->hasOne(AttendanceRequest::class)->where('is_approved', false);
     }
 
     protected function formattedDate(): Attribute

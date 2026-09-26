@@ -14,10 +14,10 @@
 <body>
     <header class="header">
         <div class="header__inner">
-            <a class="header__logo" href="/">
+            <a class="header__logo" href="/admin/login">
                 <img class="header__logo--img" src="{{ asset('images/logo.svg') }}" alt="logo">
             </a>
-            @if(Auth::check() && Auth::user()->admin_status)
+            @if(Auth::check() && Auth::user()->is_admin)
             <form action="/admin/logout" method="post">
                 @csrf
                 <nav class="inner__group">
