@@ -31,5 +31,6 @@ Route::name('admin.')->group(function () {
         Route::get('stamp_correction_request/approve/{attendanceRequest}', [AdminController::class, 'showRequest'])->name('showRequest');
         Route::post('stamp_correction_request/approve/{attendanceRequest}', [AdminController::class, 'approveRequest'])->name('approveRequest');
         Route::post('admin/logout', [AdminController::class, 'logout'])->name('logout');
+        Route::post('export', [AdminController::class, 'export'])->name('export');
     });
 });

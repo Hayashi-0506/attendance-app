@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\DateRequest;
+use App\Http\Requests\Admin\ExportAttendanceRequest;
+use App\Http\Requests\Admin\UserRequest;
 use App\Http\Requests\User\EditAttendanceRequest;
 use App\Models\AttendanceRecord;
 use App\Models\AttendanceRequest;
@@ -25,13 +28,8 @@ class AdminController extends Controller
         return view('admin.admin-login');
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
         $user = User::where('email', $request->email)->first();
 
         // is_adminでない場合は、パスワードが合っていても認証させない
@@ -46,7 +44,7 @@ class AdminController extends Controller
         return redirect()->intended(route('admin.dailyAttendanceList'));
     }
 
-    public function dailyAttendanceList(Request $request)
+    public function dailyAttendanceList(DateRequest $request)
     {
         $date = $request->query('date') ? CarbonImmutable::createFromFormat('Y-m-d', $request->query('date')) : now()->toImmutable();
         $attendanceRecords = AttendanceRecord::with('user', 'breakRecords')
@@ -70,7 +68,7 @@ class AdminController extends Controller
         return view('admin.staff-list', ['users' => $users]);
     }
 
-    public function staffAttendanceList(Request $request, User $user)
+    public function staffAttendanceList(DateRequest $request, User $user)
     {
         $date = $this->adminService->resolveTargetMonth($request->query('date'));
         $formattedAttendanceRecords = $this->adminService->getMonthlyAttendanceRecords($user, $date);
@@ -134,5 +132,32 @@ class AdminController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('admin.login');
+    }
+
+    public function export(ExportAttendanceRequest $request)
+    {
+        $user = User::find($request['user_id']);
+        $date = $this->adminService->resolveTargetMonth($request['year_month']);
+
+        $attendanceRecords = $this->adminService->getMonthlyAttendanceRecords($user, $date);
+
+        return response()->streamDownload(function () use ($attendanceRecords) {
+            $handle = fopen('php://output', 'w');
+            // BOMを追加（Excel対応）
+            fwrite($handle, "\xEF\xBB\xBF");
+            fputcsv($handle, ['日付', '出勤', '退勤', '休憩', '合計']);
+            foreach ($attendanceRecords as $attendanceRecord) {
+                fputcsv($handle, [
+                    $attendanceRecord['date'],
+                    $attendanceRecord['clock_in'],
+                    $attendanceRecord['clock_out'],
+                    $attendanceRecord['total_break_time'],
+                    $attendanceRecord['total_time'],
+                ]);
+            }
+            fclose($handle);
+        }, 'attendanceRecords_'.now()->format('Ymd_His').'.csv', [
+            'Content-Type' => 'text/csv',
+        ]);
     }
 }
