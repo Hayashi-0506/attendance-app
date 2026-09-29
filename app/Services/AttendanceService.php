@@ -128,14 +128,14 @@ class AttendanceService
     {
         $attendance->load([
             'breakRecords',
-            'approvedAttendanceRequests.breakRequests',
+            'pendingAttendanceRequest.breakRequests',
         ]);
 
-        $hasRequest = (bool) $attendance->approvedAttendanceRequests;
+        $hasRequest = (bool) $attendance->pendingAttendanceRequest;
 
         // 表示に使うデータソースを先に決定する
-        $source = $hasRequest ? $attendance->approvedAttendanceRequests : $attendance;
-        $breaks = $hasRequest ? $attendance->approvedAttendanceRequests->breakRequests : $attendance->breakRecords;
+        $source = $hasRequest ? $attendance->pendingAttendanceRequest : $attendance;
+        $breaks = $hasRequest ? $attendance->pendingAttendanceRequest->breakRequests : $attendance->breakRecords;
 
         return [
             'id' => $attendance->id,
@@ -143,8 +143,8 @@ class AttendanceService
             'date' => $attendance->date->format('n月j日'),
             'clock_in' => $source->clock_in?->format('H:i'),
             'clock_out' => $source->clock_out?->format('H:i'),
-            'application' => $hasRequest ? $attendance->approvedAttendanceRequests->request_status : null,
-            'comment' => $hasRequest ? $attendance->approvedAttendanceRequests->comment : '',
+            'application' => $hasRequest ? $attendance->pendingAttendanceRequest->request_status : null,
+            'comment' => $hasRequest ? $attendance->pendingAttendanceRequest->comment : '',
             'breaks' => $breaks->map(fn ($break) => [
                 'break_in' => $break->break_in?->format('H:i'),
                 'break_out' => $break->break_out?->format('H:i'),

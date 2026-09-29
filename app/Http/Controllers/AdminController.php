@@ -35,7 +35,7 @@ class AdminController extends Controller
         // is_adminでない場合は、パスワードが合っていても認証させない
         if (! $user || ! $user->is_admin || ! Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => 'ログイン情報が登録されていません。',
+                'email' => 'ログイン情報が登録されていません',
             ]);
         }
 

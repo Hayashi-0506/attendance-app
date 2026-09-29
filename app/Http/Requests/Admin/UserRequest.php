@@ -27,4 +27,12 @@ class UserRequest extends FormRequest
             'password' => ['required'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'メールアドレスを入力してください',
+            'password.required' => 'パスワードを入力してください',
+        ];
+    }
 }
