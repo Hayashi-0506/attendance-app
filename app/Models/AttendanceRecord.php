@@ -56,7 +56,7 @@ class AttendanceRecord extends Model
         return $this->hasOne(BreakRecord::class)->latestOfMany('break_in');
     }
 
-    public function approvedAttendanceRequests(): HasOne
+    public function pendingAttendanceRequest(): HasOne
     {
         return $this->hasOne(AttendanceRequest::class)->where('is_approved', false);
     }

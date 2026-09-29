@@ -4,17 +4,18 @@ namespace App\Services;
 
 use App\Models\AttendanceRequest;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\View\View;
 
 class RequestService
 {
-    public function getApplicationList()
+    public function getApplicationList(): View
     {
         return auth()->user()->is_admin
             ? $this->listForAdmin()
             : $this->listForUser();
     }
 
-    private function listForAdmin()
+    private function listForAdmin(): View
     {
         $attendanceRequests = AttendanceRequest::with('user', 'attendanceRecord', 'breakRequests')
             ->get();
@@ -24,7 +25,7 @@ class RequestService
         ]);
     }
 
-    private function listForUser()
+    private function listForUser(): View
     {
         $user = auth()->user();
         $attendanceRequests = AttendanceRequest::with('attendanceRecord', 'breakRequests')

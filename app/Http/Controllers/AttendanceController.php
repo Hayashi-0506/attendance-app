@@ -25,8 +25,8 @@ class AttendanceController extends Controller
     public function index()
     {
         $user = User::with('todayAttendance')->findOrFail(auth()->id());
-        $formattedDate = date('Y-m-d');
-        $formattedTime = date('H:i:s');
+        $formattedDate = now()->format('Y-m-d');
+        $formattedTime = now()->format('H:i:s');
 
         return view('user.attendance-register', compact('user', 'formattedDate', 'formattedTime'));
     }
