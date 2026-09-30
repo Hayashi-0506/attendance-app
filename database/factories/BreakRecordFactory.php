@@ -7,7 +7,7 @@ use App\Models\BreakRecord;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BreakRecord>
+ * @extends Factory<BreakRecord>
  */
 class BreakRecordFactory extends Factory
 {

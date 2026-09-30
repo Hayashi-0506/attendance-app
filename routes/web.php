@@ -9,6 +9,7 @@ Route::name('attendance.')->group(function () {
         Route::get('attendance', [AttendanceController::class, 'index'])->name('index');
         Route::post('attendance', [AttendanceController::class, 'store'])->name('store');
         Route::get('attendance/list', [AttendanceController::class, 'attendanceList'])->name('attendanceList');
+        Route::get('attendance/report', [AttendanceController::class, 'report'])->name('report');
         Route::get('attendance/{attendanceRecord}', [AttendanceController::class, 'showAttendance'])->name('showAttendance');
         Route::post('attendance/{attendanceRecord}', [AttendanceController::class, 'edit'])->name('edit');
         Route::get('stamp_correction_request/list', [AttendanceController::class, 'applicationList'])->name('applicationList');

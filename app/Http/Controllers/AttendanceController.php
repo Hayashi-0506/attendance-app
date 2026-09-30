@@ -9,6 +9,7 @@ use App\Models\AttendanceRecord;
 use App\Models\AttendanceRequest;
 use App\Models\User;
 use App\Services\AttendanceService;
+use App\Services\ReportService;
 use App\Services\RequestService;
 use Illuminate\Database\QueryException;
 
@@ -17,6 +18,7 @@ class AttendanceController extends Controller
     public function __construct(
         private AttendanceService $attendanceService,
         private RequestService $requestService,
+        private ReportService $reportService,
     ) {}
 
     /**
@@ -113,5 +115,13 @@ class AttendanceController extends Controller
             'data' => $data,
             'user' => auth()->user(),
         ]);
+    }
+
+    /**
+     * レポート
+     */
+    public function report()
+    {
+        return view('reports.index', $this->reportService->getReportData(auth()->user()));
     }
 }

@@ -7,7 +7,7 @@ use App\Models\BreakRequest;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BreakRequest>
+ * @extends Factory<BreakRequest>
  */
 class BreakRequestFactory extends Factory
 {
