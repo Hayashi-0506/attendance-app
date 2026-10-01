@@ -65,8 +65,14 @@ class FortifyServiceProvider extends ServiceProvider
             return view('user.user-login');
         });
 
+        // 登録ビューの設定
         Fortify::registerView(function () {
             return view('user.register');
+        });
+
+        // 認証待ち画面ビューの設定
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
         });
     }
 }
