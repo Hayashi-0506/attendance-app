@@ -5,7 +5,7 @@ use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('attendance.')->group(function () {
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('attendance', [AttendanceController::class, 'index'])->name('index');
         Route::post('attendance', [AttendanceController::class, 'store'])->name('store');
         Route::get('attendance/list', [AttendanceController::class, 'attendanceList'])->name('attendanceList');
@@ -23,7 +23,7 @@ Route::name('admin.')->group(function () {
         Route::post('admin/login', [AdminController::class, 'store']);
     });
 
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware(['auth', 'admin', 'verified'])->group(function () {
         Route::get('admin/attendance/list', [AdminController::class, 'dailyAttendanceList'])->name('dailyAttendanceList');
         Route::get('admin/attendance/{attendanceRecord}', [AdminController::class, 'showAttendance'])->name('showAttendance');
         Route::post('admin/attendance/{attendanceRecord}', [AdminController::class, 'editAttendance'])->name('editAttendance');
