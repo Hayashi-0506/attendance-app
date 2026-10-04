@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -53,13 +54,12 @@ class AttendanceRequest extends Model
         return $this->hasMany(BreakRequest::class);
     }
 
-    public function getRequestStatusAttribute()
+    public function requestStatus(): Attribute
     {
-        // dump($this->is_approved);
         if ($this->is_approved) {
-            return '承認済み';
+            return Attribute::make(get: fn () => '承認済み');
         }
 
-        return '承認待ち';
+        return Attribute::make(get: fn () => '承認待ち');
     }
 }

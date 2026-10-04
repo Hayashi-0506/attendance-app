@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unique(['user_id', 'date']);
             $table->datetime('clock_in');
             $table->datetime('clock_out')->nullable();
+            $table->string('comment', 255)->nullable();
             $table->timestamps();
         });
     }
