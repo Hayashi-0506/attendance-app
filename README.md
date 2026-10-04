@@ -22,8 +22,8 @@ COACHTECHの模擬案件テストとして作成した成果物です。
     cd laravel-practice
     ```
 
-2．クローンを取得
-# クローン
+2．**クローンを取得**
+- クローン
     ```bash
     git clone https://github.com/Hayashi-0506/attendance-app.git attendance-app
     cd attendance-app
@@ -46,7 +46,7 @@ COACHTECHの模擬案件テストとして作成した成果物です。
     ```
 
 5. **Laravel Sailのインストール**
-# Laravel Sailをインストール
+- Laravel Sailをインストール
     ```bash
     docker run --rm \
         -u "$(id -u):$(id -g)" \
@@ -84,7 +84,7 @@ Apple Silicon搭載のMacでは、`sail up -d`実行時に以下のエラーが�
     ```
 
 6. **.env ファイルの設定**
-#.env ファイルを開き、データベース接続情報が以下と一致していることを確認します。
+- .env ファイルを開き、データベース接続情報が以下と一致していることを確認します。
     ```bash
     DB_CONNECTION=mysql
     DB_HOST=mysql
@@ -99,20 +99,22 @@ Apple Silicon搭載のMacでは、`sail up -d`実行時に以下のエラーが�
     ```
 
 7. **Sailの起動とエイリアス設定**
-# Sailをバックグラウンドで起動
+- Sailをバックグラウンドで起動
     ```bash
     ./vendor/bin/sail up -d
     ```
 
-# エイリアスを設定して 'sail' だけでコマンドを実行できるようにする
+- エイリアスを設定して 'sail' だけでコマンドを実行できるようにする
     ```bash
     echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.zshrc
     ```
 
-# または bash の場合
-# echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.bashrc
+- または bash の場合
+    ```bash
+    echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" >> ~/.bashrc
+    ```
 
-# シェルを再起動するか、新しいターミナルを開いてエイリアスを有効にする
+- シェルを再起動するか、新しいターミナルを開いてエイリアスを有効にする
     ```bash
     exec $SHELL
     ```
@@ -120,37 +122,37 @@ Apple Silicon搭載のMacでは、`sail up -d`実行時に以下のエラーが�
 8. **フロントエンドのセットアップ (Vite & Tailwind CSS)**
 本プロジェクトでは、フロントエンドのスタイリングにTailwind CSSを使用します。
 
-# 1. NPM依存パッケージのインストール
+- 1. NPM依存パッケージのインストール
 > 重要: sail npm install を実行する前に、必ずSailコンテナが起動していることを確認してください。
     ```bash
     sail npm install
     ```
 
-# 2. Tailwind CSSのインストール
+- 2. Tailwind CSSのインストール
     ```bash
     sail npm install -D tailwindcss@^3.4.0 postcss autoprefixer
     sail npm install alpinejs
     ```
 
-# 3. Vite開発サーバーの起動
+- 3. Vite開発サーバーの起動
     ```bash
     sail npm run dev
     ```
 注意: sail npm run dev は実行したままにしておく必要があります。
 
 9. **アプリケーションキーの生成**
-#ルートで以下のコマンドを実行する
+-ルートで以下のコマンドを実行する
     ```bash
     sail artisan key:generate
     ```
 
 10. データベースのマイグレーションと初期データ投入
-# 以下のコマンドでテーブルを作成し、初期データを投入します。
+- 以下のコマンドでテーブルを作成し、初期データを投入します。
     ```bash
     sail artisan migrate --seed
     ```
 
-# ※既存のデータベースをリセットしたい場合は以下を実行してください。
+- ※既存のデータベースをリセットしたい場合は以下を実行してください。
         ```bash
     sail artisan migrate:fresh --seed
     ```
