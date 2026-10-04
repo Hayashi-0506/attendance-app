@@ -19,6 +19,7 @@ class AttendanceRecord extends Model
         'date',
         'clock_in',
         'clock_out',
+        'comment',
     ];
 
     protected $casts = [
@@ -82,22 +83,22 @@ class AttendanceRecord extends Model
         );
     }
 
-    public function getAttendanceStatusAttribute()
+    public function attendanceStatus(): Attribute
     {
         if (! $this->clock_in) {
-            return '勤務外';
+            return Attribute::make(get: fn () => '勤務外');
         }
 
         if ($this->clock_out) {
-            return '退勤済';
+            return Attribute::make(get: fn () => '退勤済');
         }
 
         $breaks = $this->latestBreakRecord;
         if ($breaks && ! $breaks->break_out) {
-            return '休憩中';
+            return Attribute::make(get: fn () => '休憩中');
         }
 
-        return '出勤中';
+        return Attribute::make(get: fn () => '出勤中');
     }
 
     public function totalTime(): Attribute
@@ -119,10 +120,10 @@ class AttendanceRecord extends Model
         return Attribute::make(get: fn () => $totalSeconds);
     }
 
-    public function getTotalBreakTimeAttribute()
+    public function totalBreakTime(): Attribute
     {
         if (! $this->clock_in || $this->breakRecords->isEmpty()) {
-            return 0;
+            return Attribute::make(get: fn () => 0);
         }
 
         $totalSeconds = 0;
@@ -136,7 +137,7 @@ class AttendanceRecord extends Model
             }
         }
 
-        return $totalSeconds;
+        return Attribute::make(get: fn () => $totalSeconds);
     }
 
     public function formatSecondsToHM(?int $seconds): string
