@@ -22,7 +22,7 @@ COACHTECHの模擬案件テストとして作成した成果物です。
     cd laravel-practice
     ```
 
-2．**クローンを取得**
+2. **クローンを取得**
 - クローン
     ```bash
     git clone https://github.com/Hayashi-0506/attendance-app.git attendance-app
@@ -57,7 +57,7 @@ COACHTECHの模擬案件テストとして作成した成果物です。
         composer require laravel/sail --dev
     ```
 
-# Sailの設定ファイルをパブリッシュ（MySQLを選択）
+- Sailの設定ファイルをパブリッシュ（MySQLを選択）
     ```bash
     docker run --rm \
         -u "$(id -u):$(id -g)" \
@@ -68,7 +68,7 @@ COACHTECHの模擬案件テストとして作成した成果物です。
         php artisan sail:install --with=mysql
     ```
 
-# ※M1/M2/M3 Mac（Apple Silicon）をお使いの方
+- ※M1/M2/M3 Mac（Apple Silicon）をお使いの方
 
 Apple Silicon搭載のMacでは、`sail up -d`実行時に以下のエラーが発生することがあります：
     ```bash
@@ -146,7 +146,7 @@ Apple Silicon搭載のMacでは、`sail up -d`実行時に以下のエラーが�
     sail artisan key:generate
     ```
 
-10. データベースのマイグレーションと初期データ投入
+10. **データベースのマイグレーションと初期データ投入**
 - 以下のコマンドでテーブルを作成し、初期データを投入します。
     ```bash
     sail artisan migrate --seed
