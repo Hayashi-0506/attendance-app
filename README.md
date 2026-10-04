@@ -153,7 +153,7 @@ Apple Silicon搭載のMacでは、`sail up -d`実行時に以下のエラーが�
     ```
 
 - ※既存のデータベースをリセットしたい場合は以下を実行してください。
-        ```bash
+    ```bash
     sail artisan migrate:fresh --seed
     ```
 
