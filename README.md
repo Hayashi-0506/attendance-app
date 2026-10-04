@@ -15,14 +15,14 @@ COACHTECHの模擬案件テストとして作成した成果物です。
 
 ## 環境構築手順
 
-1.**プロジェクトの配置場所へ移動**
+1. **プロジェクトの配置場所へ移動**
 # フォルダ作成
     ```bash
     mkdir laravel-practice
     cd laravel-practice
     ```
 
-2．**クローンを取得**
+2．クローンを取得
 # クローン
     ```bash
     git clone https://github.com/Hayashi-0506/attendance-app.git attendance-app
